@@ -1,24 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import RippleBox from "./ripple-box";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <RippleBox>
+        {(ref) => (
+          <button ref={ref} className="button">
+            Hello world
+          </button>
+        )}
+      </RippleBox>
+      <RippleBox>
+        {(ref) => (
+          <button ref={ref} className="button">
+            Hello world 2
+          </button>
+        )}
+      </RippleBox>
     </div>
   );
 }
