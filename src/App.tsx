@@ -1,20 +1,13 @@
 import React from "react";
-import RippleBox from "./ripple-box";
+import RippleBox from "daler-ripple-box";
 
 function App() {
   return (
     <div className="App">
-      <RippleBox>
-        {(ref) => (
+      <RippleBox rippleColor="rgba(0, 0, 0, 0.1)">
+        {(ref, contentRef) => (
           <button ref={ref} className="button">
-            Hello world
-          </button>
-        )}
-      </RippleBox>
-      <RippleBox>
-        {(ref) => (
-          <button ref={ref} className="button">
-            Hello world 2
+            <span ref={contentRef}>Hello world 2</span>
           </button>
         )}
       </RippleBox>
