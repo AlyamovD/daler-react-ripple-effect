@@ -1,5 +1,5 @@
 import React from "react";
-import RippleBox from "daler-ripple-box";
+import RippleBox from "./ripple-box";
 
 function App() {
   return (
