@@ -13,18 +13,14 @@
 
 .App {
   width: 100%;
-  height: 200vh;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
+  height: 100vh;
   gap: 20px;
 }
 
-.pan {
-  background: #e2e2e2;
-  padding: 50px;
-  border-radius: 12px;
+.buttonwrap {
+  position: absolute;
+  top: 500px;
+  left: 24px;
 }
 
 .button {

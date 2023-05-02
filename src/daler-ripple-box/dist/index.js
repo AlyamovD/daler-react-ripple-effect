@@ -28,6 +28,8 @@ const RippleBox = ({ children, rippleColor = "rgba(255, 255, 255, 0.2)", }) => {
             contentElement.classList.add("content-NEG_WNK");
         const handleMouseDown = (e) => {
             const ripple = document.createElement("span");
+            if (e.button !== 0)
+                return;
             const id = uuid();
             ripple.className = "ripple-NEG_WNK";
             ripple.style.background = rippleColor;

@@ -43,6 +43,7 @@ const RippleBox = ({
 
     const handleMouseDown = (e: MouseEvent) => {
       const ripple = document.createElement("span");
+      if (e.button !== 0) return;
       const id = uuid();
       ripple.className = "ripple-NEG_WNK";
       ripple.style.background = rippleColor;
