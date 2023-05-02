@@ -1,6 +1,20 @@
 import React from "react";
 import { v4 as uuid } from "uuid";
 import "./ripple-box.css";
+const detectMob = () => {
+    const toMatch = [
+        /Android/i,
+        /webOS/i,
+        /iPhone/i,
+        /iPad/i,
+        /iPod/i,
+        /BlackBerry/i,
+        /Windows Phone/i,
+    ];
+    return toMatch.some((toMatchItem) => {
+        return navigator.userAgent.match(toMatchItem);
+    });
+};
 const RippleBox = ({ children, rippleColor = "rgba(255, 255, 255, 0.2)", }) => {
     const ref = React.useRef();
     const contentRef = React.useRef();
@@ -33,8 +47,8 @@ const RippleBox = ({ children, rippleColor = "rgba(255, 255, 255, 0.2)", }) => {
             const id = uuid();
             ripple.className = "ripple-NEG_WNK";
             ripple.style.background = rippleColor;
-            ripple.style.left = e.touches[0].pageX - 65 + "px";
-            ripple.style.top = e.touches[0].pageY - 180 + "px";
+            ripple.style.left = e.touches[0].pageX - element.offsetLeft + "px";
+            ripple.style.top = e.touches[0].pageY - element.offsetTop + "px";
             ripple.style.width =
                 Math.max(element.offsetWidth, element.offsetHeight) + "px";
             ripple.style.height =
@@ -53,17 +67,23 @@ const RippleBox = ({ children, rippleColor = "rgba(255, 255, 255, 0.2)", }) => {
             localRipple.style.background = "transparent";
             setTimeout(() => localRipple.remove(), 300);
         };
-        element.addEventListener("mousedown", handleMouseDown);
-        element.addEventListener("touchstart", handleTouchStart);
-        element.addEventListener("touchend", handleRemoveRipple);
-        element.addEventListener("touchcancel", handleRemoveRipple);
-        window.addEventListener("mouseup", handleRemoveRipple);
-        window.addEventListener("dragend", handleRemoveRipple);
+        if (detectMob()) {
+            element.addEventListener("touchstart", handleTouchStart);
+            window.addEventListener("touchend", handleRemoveRipple);
+            window.addEventListener("touchcancel", handleRemoveRipple);
+            window.addEventListener("touchmove", handleRemoveRipple);
+        }
+        else {
+            element.addEventListener("mousedown", handleMouseDown);
+            window.addEventListener("mouseup", handleRemoveRipple);
+            window.addEventListener("dragend", handleRemoveRipple);
+        }
         return () => {
             element.removeEventListener("mousedown", handleMouseDown);
             element.removeEventListener("touchstart", handleTouchStart);
-            element.removeEventListener("touchend", handleRemoveRipple);
-            element.removeEventListener("touchcancel", handleRemoveRipple);
+            window.removeEventListener("touchcancel", handleRemoveRipple);
+            window.removeEventListener("touchend", handleRemoveRipple);
+            window.removeEventListener("touchmove", handleRemoveRipple);
             window.removeEventListener("mouseup", handleRemoveRipple);
             window.removeEventListener("dragend", handleRemoveRipple);
         };

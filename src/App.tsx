@@ -11,6 +11,13 @@ function App() {
           </button>
         )}
       </RippleBox>
+      <RippleBox rippleColor="rgba(0, 0, 0, 0.1)">
+        {(ref, contentRef) => (
+          <button ref={ref} className="button">
+            <span ref={contentRef}>Hello world 2</span>
+          </button>
+        )}
+      </RippleBox>
     </div>
   );
 }
