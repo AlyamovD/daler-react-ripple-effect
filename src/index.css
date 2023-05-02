@@ -19,8 +19,10 @@
 
 .buttonwrap {
   position: absolute;
-  top: 500px;
-  left: 24px;
+  top: 50px;
+  left: 70px;
+  /* margin-top: 50px;
+  margin-left: 50px; */
 }
 
 .button {
