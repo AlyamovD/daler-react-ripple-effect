@@ -3,10 +3,7 @@ import { v4 as uuid } from "uuid";
 import "./ripple-box.css";
 
 interface IProps {
-  children: (
-    ref: React.RefObject<any>,
-    contentRef?: React.RefObject<any>
-  ) => JSX.Element;
+  children: (ref: React.RefObject<any>, contentRef?: React.RefObject<any>) => JSX.Element;
   rippleColor?: string;
 }
 
@@ -25,10 +22,7 @@ const detectMob = () => {
   });
 };
 
-const RippleBox = ({
-  children,
-  rippleColor = "rgba(255, 255, 255, 0.2)",
-}: IProps) => {
+const RippleBox = ({ children, rippleColor = "rgba(255, 255, 255, 0.2)" }: IProps) => {
   const ref = React.useRef();
   const contentRef = React.useRef();
 
@@ -41,6 +35,22 @@ const RippleBox = ({
     element.style.position = "relative";
     if (contentElement) contentElement.classList.add("content-NEG_WNK");
 
+    let passiveSupported = false;
+    try {
+      const options = {
+        get passive() {
+          // This function will be called when the browser
+          // attempts to access the passive property.
+          passiveSupported = true;
+          return false;
+        },
+      };
+
+      window.addEventListener("test", () => {}, options);
+    } catch (err) {
+      passiveSupported = false;
+    }
+
     const handleMouseDown = (e: MouseEvent) => {
       const ripple = document.createElement("span");
       if (e.button !== 0) return;
@@ -49,10 +59,8 @@ const RippleBox = ({
       ripple.style.background = rippleColor;
       ripple.style.left = e.offsetX + "px";
       ripple.style.top = e.offsetY + "px";
-      ripple.style.width =
-        Math.max(element.offsetWidth, element.offsetHeight) + "px";
-      ripple.style.height =
-        Math.max(element.offsetWidth, element.offsetHeight) + "px";
+      ripple.style.width = Math.max(element.offsetWidth, element.offsetHeight) + "px";
+      ripple.style.height = Math.max(element.offsetWidth, element.offsetHeight) + "px";
       ripple.id = "ripple-" + id;
       rippleIdForRemove = "#ripple-" + id;
       element.appendChild(ripple);
@@ -66,10 +74,8 @@ const RippleBox = ({
       ripple.style.background = rippleColor;
       ripple.style.left = e.touches[0].pageX - element.getBoundingClientRect().left + "px";
       ripple.style.top = e.touches[0].pageY - element.getBoundingClientRect().top + "px";
-      ripple.style.width =
-        Math.max(element.offsetWidth, element.offsetHeight) + "px";
-      ripple.style.height =
-        Math.max(element.offsetWidth, element.offsetHeight) + "px";
+      ripple.style.width = Math.max(element.offsetWidth, element.offsetHeight) + "px";
+      ripple.style.height = Math.max(element.offsetWidth, element.offsetHeight) + "px";
       ripple.id = "ripple-" + id;
       rippleIdForRemove = "#ripple-" + id;
       element.appendChild(ripple);
@@ -78,9 +84,7 @@ const RippleBox = ({
 
     const handleRemoveRipple = () => {
       if (!rippleIdForRemove) return;
-      const localRipple = document.querySelector(
-        rippleIdForRemove
-      ) as HTMLElement;
+      const localRipple = document.querySelector(rippleIdForRemove) as HTMLElement;
       if (!localRipple) return;
       localRipple.style.background = "transparent";
       setTimeout(() => localRipple.remove(), 300);
@@ -92,9 +96,21 @@ const RippleBox = ({
       window.addEventListener("touchcancel", handleRemoveRipple);
       window.addEventListener("touchmove", handleRemoveRipple);
     } else {
-      element.addEventListener("mousedown", handleMouseDown);
-      window.addEventListener("mouseup", handleRemoveRipple);
-      window.addEventListener("dragend", handleRemoveRipple);
+      element.addEventListener(
+        "mousedown",
+        handleMouseDown,
+        passiveSupported ? { passive: true } : false
+      );
+      window.addEventListener(
+        "mouseup",
+        handleRemoveRipple,
+        passiveSupported ? { passive: true } : false
+      );
+      window.addEventListener(
+        "dragend",
+        handleRemoveRipple,
+        passiveSupported ? { passive: true } : false
+      );
     }
 
     return () => {
