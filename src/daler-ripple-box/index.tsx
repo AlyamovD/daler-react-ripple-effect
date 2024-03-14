@@ -72,7 +72,8 @@ const RippleBox = ({ children, rippleColor = "rgba(255, 255, 255, 0.2)" }: IProp
       const id = uuid();
       ripple.className = "ripple-NEG_WNK";
       ripple.style.background = rippleColor;
-      ripple.style.left = e.touches[0].pageX - element.getBoundingClientRect().left + "px";
+      ripple.style.left =
+        e.touches[0].pageX - element.getBoundingClientRect().left + "px";
       ripple.style.top = e.touches[0].pageY - element.getBoundingClientRect().top + "px";
       ripple.style.width = Math.max(element.offsetWidth, element.offsetHeight) + "px";
       ripple.style.height = Math.max(element.offsetWidth, element.offsetHeight) + "px";
@@ -91,7 +92,7 @@ const RippleBox = ({ children, rippleColor = "rgba(255, 255, 255, 0.2)" }: IProp
     };
 
     if (detectMob()) {
-      element.addEventListener("touchstart", handleTouchStart);
+      element.addEventListener("touchstart", handleTouchStart, { passive: true });
       window.addEventListener("touchend", handleRemoveRipple);
       window.addEventListener("touchcancel", handleRemoveRipple);
       window.addEventListener("touchmove", handleRemoveRipple);
